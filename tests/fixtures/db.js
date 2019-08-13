@@ -4,6 +4,20 @@ const User = require('../../src/models/user');
 const Employee = require('../../src/models/employee');
 const Organisation = require('../../src/models/organisation');
 
+const employeeOneId = new mongoose.Types.ObjectId();
+let employeeOne = {
+  _id: employeeOneId,
+  firstName: "EmployeeOneFirst",
+  lastName: "EmployeeOneLast"
+}
+
+const employeeTwoId = new mongoose.Types.ObjectId();
+let employeeTwo = {
+  _id: employeeTwoId,
+  firstName: "EmployeeTwoFirst",
+  lastName: "EmployeeTwoLast"
+}
+
 const orgOneId = new mongoose.Types.ObjectId();
 const orgOne = {
   _id: orgOneId,
@@ -16,8 +30,8 @@ const userOne = {
   password: "user56what!",
   email: "user@example.com",
   isAdmin: true,
-  employee: ,
-  organisation: ,
+  employee: employeeOne._id,
+  organisation: orgOne._id,
   tokens: [{
     token: jwt.sign({ _id: userOneId }, process.env.JWT_SECRET)
   }]
@@ -29,22 +43,36 @@ const userTwo = {
   password: "user256what!",
   email: "user2@example.com",
   isAdmin: false,
-  employee: ,
-  organisation: ,
+  employee: employeeTwo._id,
+  organisation: orgOne._id,
   tokens: [{
     token: jwt.sign({ _id: userTwoId }, process.env.JWT_SECRET)
   }],
 };
 
+employeeOne = Object.assign(employeeOne, {
+  password: userOne.password,
+  email: userOne.email,
+  isAdmin: userOne.isAdmin
+})
+
+employeeTwo = Object.assign(employeeTwo, {
+  password: userTwo.password,
+  email: userTwo.email,
+  isAdmin: userTwo.isAdmin
+})
+
+
 const setupDB = async () => {
   await User.deleteMany();
-  await Task.deleteMany();
+  await Employee.deleteMany();
+  await Organisation.deleteMany();
 
   await new User(userOne).save();
   await new User(userTwo).save();
-  await new Task(taskOne).save();
-  await new Task(taskTwo).save();
-  await new Task(taskThree).save();
+  await new Employee(employeeOne).save();
+  await new Employee(employeeTwo).save();
+  await new Organisation(orgOne).save();
 }
 
 module.exports = {
@@ -52,6 +80,11 @@ module.exports = {
   userOneId,
   userTwo,
   userTwoId,
-  setupDB,
-  taskOne
+  employeeOne,
+  employeeOneId,
+  employeeTwo,
+  employeeTwoId,
+  orgOne,
+  orgOneId,
+  setupDB
 }
