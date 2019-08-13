@@ -5,3 +5,4 @@ mongodb command.txt
 misc
 src/math.js
 tests/math.test.js
+package-lock.json
