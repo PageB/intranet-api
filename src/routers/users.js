@@ -19,7 +19,6 @@ const auth = require('../middleware/auth');
   */
  router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  console.log('Login user.')
 
   try {
     const user = await User.findByCredentials(email, password);
@@ -45,8 +44,6 @@ const auth = require('../middleware/auth');
     }
   */
 router.post('/logout', auth, async (req, res) => {
-  console.log('Logout user.')
-  
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
       return token.token !== req.token;

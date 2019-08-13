@@ -24,6 +24,12 @@ const orgOne = {
   name: "OrganisationOne"
 }
 
+const orgTwoId = new mongoose.Types.ObjectId();
+const orgTwo = {
+  _id: orgTwoId,
+  name: "OrganisationTwo"
+}
+
 const userOneId = new mongoose.Types.ObjectId();
 const userOne = {
   _id: userOneId,
@@ -62,7 +68,6 @@ employeeTwo = Object.assign(employeeTwo, {
   isAdmin: userTwo.isAdmin
 })
 
-
 const setupDB = async () => {
   await User.deleteMany();
   await Employee.deleteMany();
@@ -86,5 +91,7 @@ module.exports = {
   employeeTwoId,
   orgOne,
   orgOneId,
+  orgTwo,
+  orgTwoId,
   setupDB
 }
