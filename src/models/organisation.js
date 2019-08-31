@@ -21,6 +21,17 @@ organisationSchema.virtual('employees', {
   localField: '_id'
 });
 
+organisationSchema.virtual('teams', {
+  ref: 'Team',
+  foreignField: 'organisation',
+  localField: '_id'
+});
+
+organisationSchema.virtual('positions', {
+  ref: 'Position',
+  foreignField: 'organisation',
+  localField: '_id'
+});
 
 const Organisation = mongoose.model('Organisation', organisationSchema);
 

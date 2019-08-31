@@ -35,9 +35,52 @@ const employeeSchema = new mongoose.Schema({
       }
     }
   },
-  isAdmin: {
-    type: Boolean,
-    default: false
+  birthday: {
+    type: Date,
+    required: true
+  },
+  image: {},
+  photo: {},
+  avatar: {},
+  education: {
+    type: String,
+    required: true
+  },
+  expertise: {
+    type: String,
+    required: true
+  },
+  skills: {
+    type: String,
+    required: true
+  },
+  languages: {
+    type: String,
+    required: true
+  },
+  hobbies: {
+    type: String,
+    required: true
+  },
+  song: {
+    type: String,
+    required: true
+  },
+  thought: {
+    type: String,
+    required: true
+  },
+  book: {
+    type: String,
+    required: true
+  },
+  pet: {
+    type: String,
+    required: true
+  },
+  skype: {
+    type: String,
+    required: true
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -66,7 +109,7 @@ employeeSchema.pre('save', async function(next) {
   if (this.isModified('password')) {
     this.password = await bcryptjs.hash(this.password, 8);
   }
-  
+
   next();
 });
 
@@ -76,6 +119,7 @@ employeeSchema.pre('remove', async function (next) {
 
   next()
 })
+
 
 const Employee = mongoose.model('Employee', employeeSchema);
 
