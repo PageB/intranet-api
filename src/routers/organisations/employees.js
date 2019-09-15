@@ -163,6 +163,7 @@ router.get('/:id/prev', auth, async (req, res) => {
 */
 router.put('/:id', auth, async (req, res) => {
   delete req.body.employee.password
+  const updates = Object.keys(req.body.employee);
   const allowedUpdates = ['firstName', 'lastName', 'createdAt', 'updatedAt', 'birthday', 'image', 'photo', 'avatar', 'education', 'expertise', 'skills', 'languages', 'hobbies', 'song', 'thought', 'book', 'pet', 'skype', 'email'];
 
   const isValidUpdate = updates.every((update) => allowedUpdates.includes(update))
