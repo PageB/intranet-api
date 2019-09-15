@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const multer = require('multer');
+const sharp = require('sharp');
 const auth = require('../../middleware/auth');
 const User = require('../../models/user');
 const Employee = require('../../models/employee');
@@ -14,6 +16,18 @@ const createUser = (employee) => {
     organisation: employee.organisation._id
   });
 }
+
+const upload = multer({
+  fileFilter(req, file, cb) {
+    const fileType = file.originalname.match(/\.(jpg|jpeg|png)$/);
+
+    if (!fileType) {
+      return cb(new Error('File must me a jpg/png file type.'));
+    } else {
+      return cb(undefined, true);
+    }
+  }
+})
 
 /**
  * Create a new employee
@@ -31,13 +45,13 @@ const createUser = (employee) => {
       "isAdmin": true
     }
 */
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, upload.single('avatar'), async (req, res) => {
   const employee = new Employee({
-    ...req.body,
+    ...req.body.employee,
     organisation: req.orgId
-  })
+  });
   const user = createUser(employee);
- 
+
   try {
     await employee.save();
     await user.save();
@@ -103,7 +117,6 @@ router.get('/:id/next', auth, async (req, res) => {
 
     res.status(200).send(employee);
   } catch (e) {
-    console.log(e)
     res.status(500).send(e);
   }
 })
@@ -149,8 +162,9 @@ router.get('/:id/prev', auth, async (req, res) => {
     }
 */
 router.put('/:id', auth, async (req, res) => {
-  const updates = Object.keys(req.body.employee);
-  const allowedUpdates = ['firstName', 'lastName', 'createdAt', 'updatedAt', 'birthday',  'image', 'photo', 'avatar', 'education', 'expertise', 'skills', 'languages', 'hobbies', 'song', 'thought', 'book', 'pet', 'skype', 'email'];
+  delete req.body.employee.password
+  const allowedUpdates = ['firstName', 'lastName', 'createdAt', 'updatedAt', 'birthday', 'image', 'photo', 'avatar', 'education', 'expertise', 'skills', 'languages', 'hobbies', 'song', 'thought', 'book', 'pet', 'skype', 'email'];
+
   const isValidUpdate = updates.every((update) => allowedUpdates.includes(update))
   
   if (!isValidUpdate) {
@@ -164,9 +178,8 @@ router.put('/:id', auth, async (req, res) => {
       return res.status(404).send();
     }
 
-
     updates.forEach(update => employee[update] = req.body.employee[update])
-
+    
     await employee.save();
 
     res.status(200).send(employee);
