@@ -82,13 +82,9 @@ router.get('/', auth, async (req, res) => {
       path: 'employees'
     }).execPopulate()
 
-    if (!organisation.employees.length) {
-      return res.status(404).send({
-        error: 'Employees are not found in this organisation.'
-      });
+    if (organisation.employees.length) {
+      organisation.employees.forEach((employee) => employees.push(employee))
     }
-
-    organisation.employees.forEach((employee) => employees.push(employee))
     
     res.status(200).send({ employees })
   } catch (e) {
