@@ -98,7 +98,7 @@ const employeeSchema = new mongoose.Schema({
 
 employeeSchema.methods.toJSON = function () {
   const userObject = this.toObject();
-  
+
   delete userObject.password;
   delete userObject.isAdmin;
 
@@ -114,7 +114,6 @@ employeeSchema.pre('save', async function(next) {
 });
 
 employeeSchema.pre('remove', async function (next) {
-  console.log(this._id)
   await User.deleteOne({ employee: this._id })
 
   next()
